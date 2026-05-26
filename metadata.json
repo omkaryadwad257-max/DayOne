@@ -1,0 +1,6 @@
+{
+  "name": "DayOne New Tab",
+  "description": "A beautiful, premium Chrome extension new tab page that delivers AI-powered interactive micro-learning, focus goals, and elegant productivity trackers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

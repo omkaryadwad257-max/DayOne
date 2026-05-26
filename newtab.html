@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Tab | DayOne</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="ambient-glow"></div>
+    
+    <div id="dashboard-view" class="container animate-fade-in hidden">
+        <!-- TOP NAVIGATION BAR -->
+        <header class="app-header">
+            <div class="brand">
+                <span class="logo-dot"></span>
+                <span class="logo-text">DAYONE</span>
+            </div>
+            <div class="flex-row-gap" style="display: flex; gap: 12px; align-items: center;">
+                <button id="reset-onboarding-btn" class="track-pill" style="font-size: 9px; padding: 4px 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.4); border-radius: 6px;">
+                    Reset Topics
+                </button>
+                <div class="streak-badge">
+                    <span class="badge-icon">🔥</span>
+                    <span id="streak-count">5 Day Streak</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN HERO CONTENT (CLOCK & GREETING) -->
+        <main class="hero-section">
+            <div class="date-badge" id="date-display">
+                <span class="badge-dot"></span> TUESDAY, MAY 26
+            </div>
+            <h1 class="clock-display" id="time-display">15:00:00</h1>
+            <div class="greeting-bar">
+                <span>Good afternoon, <span id="username-display" class="highlight-name">Omkar</span>.</span>
+                <button id="edit-name-btn" class="icon-btn" title="Edit Name">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+            </div>
+        </main>
+
+        <!-- DOCK LAYOUT: STALWART LEFT, HUB RIGHT -->
+        <section class="workspace-grid">
+            <!-- FOCUS BOX -->
+            <div class="card focus-card">
+                <h3 class="card-title select-none">
+                    <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    TODAY'S STRATEGY Focus
+                </h3>
+                <form id="focus-form" class="form-row">
+                    <input type="text" id="focus-input" placeholder="What mental milestone is next?" maxlength="80">
+                    <button type="submit" class="submit-btn" title="Add Focus Check">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                </form>
+                <div id="focus-list" class="check-list">
+                    <!-- Loaded dynamically from storage -->
+                </div>
+                <div class="focus-footer font-mono" id="focus-metrics">
+                    0 PENDING CHECKS
+                </div>
+            </div>
+
+            <!-- MICRO-LEARNING CARD -->
+            <div class="card learning-card bg-gradient-brand">
+                <div class="learning-header">
+                    <div class="brand-sub">
+                        <span class="category-tag" id="article-category">COMPUTER SCIENCE</span>
+                        <span class="read-time font-mono">• 3 MIN STUDY</span>
+                    </div>
+                </div>
+
+                <div class="learning-body" id="article-container">
+                    <h2 class="article-title" id="article-title">V8 Engine Just-In-Time Architecture</h2>
+                    <p class="article-text" id="article-text">
+                        The V8 JavaScript Engine uses JIT Compilation. It incorporates two models: Ignition and Turbofan.
+                    </p>
+                </div>
+
+                <!-- KEY TAKEAWAYS -->
+                <div class="takeaways-box" id="article-takeaways">
+                    <!-- Populated via static database in newtab.js -->
+                </div>
+
+                <!-- QUIZ COMPREHENSION AREA -->
+                <div class="quiz-section">
+                    <div class="quiz-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        <span>Active Comprehension Check</span>
+                    </div>
+                    <p class="quiz-question" id="quiz-question">What does JIT stand for?</p>
+                    <div class="quiz-options" id="quiz-options-container">
+                        <!-- Filled dynamically -->
+                    </div>
+                    <div class="quiz-action-bar">
+                        <button id="submit-quiz-btn" class="action-btn" disabled>SUBMIT ANSWER</button>
+                    </div>
+                    <div class="quiz-feedback hidden" id="quiz-feedback-box">
+                        <div class="feedback-indicator">
+                            <span class="feedback-title" id="feedback-emoji">✅</span>
+                            <span id="feedback-headline" class="feedback-headline">Correct Reason</span>
+                        </div>
+                        <p id="feedback-text" class="feedback-para">
+                            Explanation from DayOne Learning Library.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CATEGORY TRIGGERS -->
+                <div class="learning-footer border-t border-white-5">
+                    <span class="footer-label font-mono cursor-pointer select-none">CYCLE TRACKS:</span>
+                    <div class="tracks-list" id="tracks-container">
+                        <button class="track-pill active" data-category="computer science">💻 Coding</button>
+                        <button class="track-pill" data-category="astrophysics">🌌 Astrophysics</button>
+                        <button class="track-pill" data-category="design">🎨 UI/UX</button>
+                        <button class="track-pill" data-category="default">🧠 Psych</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FOOTER CREDITS -->
+        <footer class="app-footer">
+            <span class="text-mute font-mono">DayOne Extension Environment • Unpacked Developer Build</span>
+            <span id="version-label" class="font-mono">v1.0.0</span>
+        </footer>
+    </div>
+
+    <!-- NATIVE CHROME ONBOARDING VIEW -->
+    <div id="onboarding-view" class="onboarding-container animate-fade-in">
+        <header class="onboarding-header">
+            <div class="brand">
+                <span class="logo-dot"></span>
+                <span class="logo-text">DAYONE</span>
+            </div>
+            <div class="badge-tag font-mono">ONBOARDING STREAM</div>
+        </header>
+
+        <!-- STEP 1: TOPIC SELECTION -->
+        <div id="onboarding-step-selection" class="onboarding-middle">
+            <div class="date-badge font-mono" style="margin-bottom: 16px;">
+                <span class="badge-dot"></span> SCREEN 1: TOPIC SELECTION
+            </div>
+            
+            <h1 class="onboarding-main-title">What do you want to <span class="accent-text-glow">get good at?</span></h1>
+            <p class="onboarding-desc">
+                Select the elite skills you want to trigger daily. DayOne synthesizes focus sprints, cognitive checkpoints, and interactive study tracks personalized specifically around you.
+            </p>
+
+            <!-- Predefined category grid cards -->
+            <div class="onboarding-grid" id="onboarding-topics-grid">
+                <!-- Top cards will be handled via class list triggers -->
+                <div class="onboard-card" data-topic="marketing">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#fb7185; background:rgba(251,113,133,0.12);">📢</div>
+                    <span class="onboard-label">Marketing</span>
+                </div>
+                <div class="onboard-card" data-topic="design">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#fbbf24; background:rgba(251,191,36,0.12);">🎨</div>
+                    <span class="onboard-label">Design</span>
+                </div>
+                <div class="onboard-card" data-topic="coding">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#22d3ee; background:rgba(34,211,238,0.12);">💻</div>
+                    <span class="onboard-label">Coding</span>
+                </div>
+                <div class="onboard-card" data-topic="finance">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#34d399; background:rgba(52,211,153,0.12);">💵</div>
+                    <span class="onboard-label">Finance</span>
+                </div>
+                <div class="onboard-card" data-topic="sales">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#2dd4bf; background:rgba(45,212,191,0.12);">📈</div>
+                    <span class="onboard-label">Sales</span>
+                </div>
+                <div class="onboard-card" data-topic="writing">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#c084fc; background:rgba(192,132,252,0.12);">✍️</div>
+                    <span class="onboard-label">Writing</span>
+                </div>
+                <div class="onboard-card" data-topic="leadership">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#facc15; background:rgba(250,204,21,0.12);">👑</div>
+                    <span class="onboard-label">Leadership</span>
+                </div>
+                <div class="onboard-card" data-topic="ai_automation">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#818cf8; background:rgba(129,140,248,0.12);">🤖</div>
+                    <span class="onboard-label">AI & Automation</span>
+                </div>
+                <div class="onboard-card" data-topic="public_speaking">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#38bdf8; background:rgba(56,189,248,0.12);">🎤</div>
+                    <span class="onboard-label">Public Speaking</span>
+                </div>
+                <div class="onboard-card" data-topic="productivity">
+                    <div class="onboard-indicator"></div>
+                    <div class="onboard-icon-ring" style="color:#f472b6; background:rgba(244,114,182,0.12);">⚡</div>
+                    <span class="onboard-label">Productivity</span>
+                </div>
+            </div>
+
+            <!-- Custom text input for alternate/additional tracks -->
+            <div class="onboard-custom-box">
+                <span class="custom-title font-mono">SOMETHING ELSE? EXERCISE ANY CURIOUS FIELD:</span>
+                <form id="onboarding-custom-form" class="form-row" style="margin-top: 8px; margin-bottom: 8px;">
+                    <input type="text" id="onboarding-custom-input" placeholder="Type custom technology or target (e.g. Systems Engineering, Chess)" maxlength="35">
+                    <button type="submit" class="submit-btn font-mono" style="font-size:11px; font-weight:bold;">ADD</button>
+                </form>
+                <div id="onboarding-chips-drawer" class="onboarding-chips-drawer">
+                    <!-- Dynamic chips render here -->
+                </div>
+            </div>
+
+            <!-- Start button -->
+            <div class="onboarding-footer-cta" style="margin-top: 35px; display:flex; justify-content:center;">
+                <button id="onboarding-start-btn" class="onboarding-start-btn" disabled>
+                    LET'S BEGIN <span style="margin-left:8px;">→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 2: CONVERSATIONAL EXPERTISE ASSESSMENT -->
+        <div id="onboarding-step-assessment" class="onboarding-middle hidden" style="width: 100%; max-width: 500px; margin: 0 auto;">
+            <div class="flex-row-gap" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 24px;">
+                <button id="assessment-back-btn" class="track-pill" style="font-size: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 12px; color: rgba(255,255,255,0.6); cursor:pointer;">
+                    ← Back
+                </button>
+                <div class="progress-dots" style="display: flex; gap: 6px;" id="assessment-progress-dots">
+                    <!-- Dynamic dots -->
+                </div>
+                <span id="assessment-q-count" class="font-mono" style="font-size: 10px; color: rgba(255,255,255,0.4);">Q 1 OF 3</span>
+            </div>
+
+            <div class="assessment-card" style="width: 100%; text-align: left; background: rgba(17, 17, 25, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="assessment-topic-badge" class="badge-tag" style="font-size:9px; font-weight:bold; letter-spacing:1px; border-radius:6px; padding:3px 8px; background-color: rgba(108, 99, 255, 0.12);">CODING ASSESSMENT</span>
+                    <span style="color:#555; font-family:var(--mono-font); font-size:9px;">• CHAT STREAM</span>
+                </div>
+                
+                <h2 id="assessment-question-title" style="font-size: 20px; font-weight:800; line-height: 1.4; color: white; margin: 0;">Have you ever written a production loop, script, or web app?</h2>
+
+                <div id="assessment-options-container" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                    <!-- Dynamic options populate here -->
+                </div>
+            </div>
+
+            <div class="onboarding-footer-cta" style="margin-top: 24px; display:flex; justify-content:flex-end; width:100%;">
+                <button id="assessment-next-btn" class="onboarding-start-btn" style="padding: 10px 24px; font-size:11px;">
+                    CONTINUE →
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 3: EXCITING ROADMAP SYNTHESIS -->
+        <div id="onboarding-step-summary" class="onboarding-middle hidden" style="width: 100%; max-width: 500px; margin: 0 auto; text-align:center;">
+            <div class="icon-pulse-placeholder" style="width: 56px; height: 56px; border-radius: 16px; background: rgba(108, 99, 255, 0.25); border: 1px solid rgba(108, 99, 255, 0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; margin-left: auto; margin-right: auto;">
+                <span class="pulse-sparkle" style="font-size:24px;">💡</span>
+            </div>
+
+            <span class="font-mono text-uppercase" style="font-size: 9px; letter-spacing: 0.15em; font-weight: bold; color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 6px; justify-content: center; margin-bottom: 12px;">
+                ⚙️ GROWTH PROFILE SYNTHESIZED
+            </span>
+
+            <h1 class="onboarding-main-title" style="font-size: 28px; font-weight: 800; letter-spacing:-0.5px; line-height: 1.2; margin-bottom: 12px;">Curating your DayOne growth path...</h1>
+            
+            <div class="assessment-card text-left" style="width: 100%; text-align: left; background: rgba(17, 17, 25, 0.55); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; box-sizing: border-box; margin-bottom: 24px; position:relative; overflow:hidden;">
+                <p id="summary-roadmap-text" style="font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.6); margin: 0 0 16px 0;">
+                    Got it. We'll start from <strong id="summary-level-badge" style="color: white; background: rgba(108, 99, 255, 0.2); outline: 1px solid rgba(108, 99, 255, 0.2); padding: 3px 8px; border-radius: 6px; font-weight: bold; font-size: 11px;">Beginner</strong> and focus on <span id="summary-goal-italic" style="color: #a29bfe; font-style: italic;">"mastering core skills"</span>.
+                </p>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.04); padding-top: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 11px; color: rgba(255,255,255,0.4);">
+                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #6c63ff;">✓</span> Generating custom learning cards</div>
+                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #6c63ff;">✓</span> Adjusting focus checklist complexity</div>
+                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #6c63ff;">✓</span> Calibrating micro-learning metrics</div>
+                </div>
+            </div>
+
+            <button id="summary-finish-btn" class="onboarding-start-btn" style="width: 100%; padding: 14px 24px; font-size: 12px;">
+                ENTER DAYONE DASHBOARD
+            </button>
+        </div>
+    </div>
+
+    <!-- Rename overlays modal style -->
+    <div id="rename-modal" class="modal-overlay hidden">
+        <div class="modal-box card">
+            <h3 class="modal-title select-none">Renaming Student Accent</h3>
+            <input type="text" id="rename-input" placeholder="Omkar" maxlength="15">
+            <div class="modal-buttons">
+                <button id="cancel-rename-btn" class="modal-btn secondary-btn">Cancel</button>
+                <button id="save-rename-btn" class="modal-btn primary-btn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="newtab.js"></script>
+</body>
+</html>

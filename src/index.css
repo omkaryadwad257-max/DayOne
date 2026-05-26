@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-theme-bg: var(--bg);
+  --color-theme-surface: var(--surface);
+  --color-theme-surface-2: var(--surface-2);
+  --color-theme-border: var(--border);
+  --color-theme-accent: var(--accent);
+  --color-theme-accent-soft: var(--accent-soft);
+  --color-theme-text-primary: var(--text-primary);
+  --color-theme-text-secondary: var(--text-secondary);
+  --color-theme-success: var(--success);
+}
+
+:root, [data-theme="dark"] {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface-2: #1a1a2e;
+  --border: #1e1e2e;
+  --accent: #6C63FF;
+  --accent-soft: #9D8FFF;
+  --text-primary: #f0f0f5;
+  --text-secondary: #8888aa;
+  --success: #34d399;
+  --card-shadow: 0 4px 24px rgba(108, 99, 255, 0.1);
+  --gradient: linear-gradient(135deg, #6C63FF22, #9D8FFF11);
+}
+
+[data-theme="light"], .light {
+  --bg: #f5f4ff;
+  --surface: #ffffff;
+  --surface-2: #ede9ff;
+  --border: #e2e0f0;
+  --accent: #4F46E5;
+  --accent-soft: #7C71F0;
+  --text-primary: #0f0e1a;
+  --text-secondary: #6b6880;
+  --success: #059669;
+  --card-shadow: 0 4px 24px rgba(79, 70, 229, 0.08);
+  --gradient: linear-gradient(135deg, #4F46E510, #7C71F008);
+}
+
+/* Base body transitions to keep switching fluid yet responsive */
+*, *::before, *::after {
+  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), 
+              color 200ms cubic-bezier(0.4, 0, 0.2, 1), 
+              fill 200ms cubic-bezier(0.4, 0, 0.2, 1), 
+              stroke 200ms cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes float-drift {
+  0% {
+    transform: translate(-50%, -10px) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-47%, 15px) scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -10px) scale(1);
+    opacity: 0.85;
+  }
+}
+
+@keyframes stars-drift {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 40px 80px;
+  }
+}
+
+.animate-float-drift {
+  animation: float-drift 24s ease-in-out infinite;
+}
+
+.animate-stars-drift {
+  animation: stars-drift 90s linear infinite;
+}
