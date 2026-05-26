@@ -298,21 +298,32 @@ if (focusForm) {
   });
 }
 
-// 4. CORE MICRO-LEARNING ENGINE
-function loadLearningBite(categoryKey) {
-  const bite = staticBites[categoryKey] || staticBites["default"];
-  currentCategory = categoryKey;
+// 4. CORE MICRO-LEARNING ENGINE AND API SYNCHRONIZATION
+let activeBiteData = null; // hold current active generated or fallback bite object
+
+function renderBiteData(bite) {
+  activeBiteData = bite;
   
-  if (artCategory) artCategory.textContent = bite.category;
-  if (artTitle) artTitle.textContent = bite.topic;
-  if (artText) artText.innerHTML = bite.explanation;
+  const articleContainer = document.getElementById("article-container");
+  if (articleContainer) {
+    const categoryName = (bite.category || "General").toUpperCase();
+    articleContainer.innerHTML = `
+      <div class="article-meta">
+        <span class="category-tag" id="article-category">${categoryName}</span>
+        <span class="read-time font-mono">• 3 MIN STUDY</span>
+      </div>
+      <h2 class="article-title" id="article-title">${bite.topic}</h2>
+      <p class="article-body" id="article-text">${bite.explanation}</p>
+    `;
+  }
   
   // Render Takeaways list
   if (artTakeaways) {
     artTakeaways.innerHTML = `
       <h4 class="footer-label font-mono text-muted" style="margin-bottom: 8px;">KEY INSIGHTS</h4>
     `;
-    bite.takeaway.forEach((point, i) => {
+    const takeaways = bite.takeaway || bite.takeaways || [];
+    takeaways.forEach((point, i) => {
       const p = document.createElement("p");
       p.className = "takeaway-point";
       p.innerHTML = `<span class="takeaway-no">${i+1}.</span> <span>${point}</span>`;
@@ -321,10 +332,12 @@ function loadLearningBite(categoryKey) {
   }
   
   // Render Quiz Question
-  if (quizQuestion) quizQuestion.textContent = bite.quiz.question;
+  if (quizQuestion && bite.quiz) {
+    quizQuestion.textContent = bite.quiz.question;
+  }
   
   // Render Quiz Options
-  if (quizOptions) {
+  if (quizOptions && bite.quiz) {
     quizOptions.innerHTML = "";
     selectedOptionIndex = null;
     isQuizSubmitted = false;
@@ -335,7 +348,8 @@ function loadLearningBite(categoryKey) {
     }
     if (feedbackBox) feedbackBox.classList.add("hidden");
     
-    bite.quiz.options.forEach((opt, idx) => {
+    const options = bite.quiz.options || [];
+    options.forEach((opt, idx) => {
       const btn = document.createElement("button");
       btn.className = "quiz-opt-btn";
       btn.innerHTML = `
@@ -361,13 +375,68 @@ function loadLearningBite(categoryKey) {
   }
 }
 
+function loadLearningBite(categoryKey) {
+  currentCategory = categoryKey;
+  
+  // Display clean custom skeleton shimmers
+  const articleContainer = document.getElementById("article-container");
+  if (articleContainer) {
+    articleContainer.innerHTML = `
+      <div style="margin-top:10px;">
+        <div class="skeleton-title"></div>
+        <div class="skeleton-text" style="width: 100%;"></div>
+        <div class="skeleton-text" style="width: 95%;"></div>
+        <div class="skeleton-text" style="width: 80%;"></div>
+      </div>
+    `;
+  }
+  
+  if (artTakeaways) {
+    artTakeaways.innerHTML = `
+      <div class="skeleton-line" style="width: 90%;"></div>
+      <div class="skeleton-line" style="width: 70%;"></div>
+    `;
+  }
+  
+  if (quizOptions) {
+    quizOptions.innerHTML = `
+      <div class="skeleton-line" style="height:35px; width:100%; margin-bottom: 8px;"></div>
+      <div class="skeleton-line" style="height:35px; width:100%;"></div>
+    `;
+  }
+  
+  if (submitQuizBtn) submitQuizBtn.style.display = "none";
+  if (feedbackBox) feedbackBox.classList.add("hidden");
+  
+  const formattedKey = categoryKey.toLowerCase();
+  
+  // Try to generate dynamic learning content on /api/learning/generate
+  fetch("/api/learning/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ topic: categoryKey })
+  })
+    .then(async (res) => {
+      if (!res.ok) throw new Error("API build failure or off");
+      const bite = await res.json();
+      renderBiteData(bite);
+    })
+    .catch((err) => {
+      console.warn("Using offline standalone backup concept for category:", categoryKey, err);
+      const bite = staticBites[formattedKey] || staticBites["default"];
+      renderBiteData(bite);
+    });
+}
+
 // Submit Quiz Answer Evaluation
 if (submitQuizBtn) {
   submitQuizBtn.addEventListener("click", () => {
     if (selectedOptionIndex === null || isQuizSubmitted) return;
     isQuizSubmitted = true;
     
-    const bite = staticBites[currentCategory] || staticBites["default"];
+    const bite = activeBiteData || staticBites[currentCategory] || staticBites["default"];
+    if (!bite || !bite.quiz) return;
+
     const correctIdx = bite.quiz.correctIndex;
     const optionBtns = quizOptions.querySelectorAll(".quiz-opt-btn");
     
@@ -409,17 +478,41 @@ if (submitQuizBtn) {
   });
 }
 
-// Track Pill Activation Triggers
-if (tracksContainer) {
-  const pills = tracksContainer.querySelectorAll(".track-pill");
-  pills.forEach((pill) => {
-    pill.addEventListener("click", () => {
+function renderTracksContainer(selectedTopics) {
+  if (!tracksContainer) return;
+  tracksContainer.innerHTML = "";
+  
+  const iconMap = {
+    marketing: "📢",
+    design: "🎨",
+    coding: "💻",
+    finance: "💵",
+    sales: "📈",
+    writing: "✍️",
+    leadership: "👑",
+    ai_automation: "🤖",
+    public_speaking: "🎤",
+    productivity: "⚡",
+    "computer science": "💻"
+  };
+
+  selectedTopics.forEach((topic, idx) => {
+    const btn = document.createElement("button");
+    const label = topicLabelsMap[topic] || topic;
+    const icon = iconMap[topic.toLowerCase()] || "🧠";
+    
+    btn.className = `track-pill ${idx === 0 ? 'active' : ''}`;
+    btn.setAttribute("data-category", topic);
+    btn.innerHTML = `${icon} ${label}`;
+    
+    btn.addEventListener("click", () => {
+      const pills = tracksContainer.querySelectorAll(".track-pill");
       pills.forEach(p => p.classList.remove("active"));
-      pill.classList.add("active");
-      
-      const catVal = pill.getAttribute("data-category");
-      loadLearningBite(catVal);
+      btn.classList.add("active");
+      loadLearningBite(topic);
     });
+    
+    tracksContainer.appendChild(btn);
   });
 }
 
@@ -894,6 +987,23 @@ function initOnboarding() {
     summaryFinishBtn.addEventListener("click", () => {
       StorageUtil.set("dayone_completed_onboarding", true);
       
+      // Dynamically initialize the custom goals & targets
+      StorageUtil.get("dayone_assessment_goal", "", (goalText) => {
+        const defaultFocusText = goalText && goalText.trim() !== "" 
+          ? `Calibrate milestone: ${goalText}` 
+          : "Study daily milestone";
+          
+        focusItems = [{ id: "1", text: defaultFocusText, completed: false }];
+        StorageUtil.set("dayone_focus_items", focusItems);
+        renderFocusList();
+      });
+
+      StorageUtil.get("dayone_selected_topics", ["coding"], (topics) => {
+        selectedOnboardingTopics = topics;
+        renderTracksContainer(topics);
+        loadLearningBite(topics[0] || "coding");
+      });
+
       if (onboardingView) onboardingView.classList.add("hidden");
       if (dashboardView) dashboardView.classList.remove("hidden");
     });
@@ -922,9 +1032,41 @@ function initOnboarding() {
 
 // 6. BOOTSTRAPPING
 document.addEventListener("DOMContentLoaded", () => {
-  loadFocusItems();
-  loadLearningBite("computer science");
   initOnboarding();
+
+  // Load theme and set attribute
+  StorageUtil.get("dayone_color_theme", "dark", (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (theme === "light") {
+      document.body.classList.add("light");
+    } else {
+      document.body.classList.remove("light");
+    }
+  });
+
+  // Load custom onboarding topics dynamically
+  StorageUtil.get("dayone_selected_topics", ["coding"], (topics) => {
+    selectedOnboardingTopics = topics;
+    renderTracksContainer(topics);
+    loadLearningBite(topics[0] || "coding");
+  });
+
+  // Load custom goal and pre-populate first milestone list if empty
+  StorageUtil.get("dayone_assessment_goal", "", (goalText) => {
+    const defaultFocusText = goalText && goalText.trim() !== "" 
+      ? `Calibrate milestone: ${goalText}` 
+      : "Study dynamic programming recursion parameters";
+
+    StorageUtil.get("dayone_focus_items", null, (items) => {
+      if (items === null) {
+        focusItems = [{ id: "1", text: defaultFocusText, completed: false }];
+        StorageUtil.set("dayone_focus_items", focusItems);
+      } else {
+        focusItems = items;
+      }
+      renderFocusList();
+    });
+  });
 
   // Route screen based on completed status
   StorageUtil.get("dayone_completed_onboarding", false, (completed) => {

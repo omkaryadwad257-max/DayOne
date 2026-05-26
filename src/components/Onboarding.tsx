@@ -551,7 +551,11 @@ export default function Onboarding({ onComplete, initialPhase }: OnboardingProps
                     <textarea
                       placeholder={currentQuestion.placeholder}
                       value={answers[currentQuestion.id]}
-                      onChange={(e) => setAnswers(prev => ({ ...prev, [currentQuestion.id]: e.target.value }))}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setAnswers(prev => ({ ...prev, [currentQuestion.id]: val }));
+                        StorageUtil.set(`dayone_assessment_${currentQuestion.id}`, val);
+                      }}
                       className="w-full h-32 bg-theme-bg border border-theme-border focus:border-theme-accent/40 text-theme-text-primary rounded-xl p-4 text-xs font-sans focus:outline-none transition-all placeholder-theme-text-secondary/70 resize-none"
                     />
                     <p className="text-[10px] text-theme-text-secondary/80 font-mono leading-relaxed">

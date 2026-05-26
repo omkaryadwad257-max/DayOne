@@ -21,7 +21,7 @@
                 <span class="logo-text">DAYONE</span>
             </div>
             <div class="flex-row-gap" style="display: flex; gap: 12px; align-items: center;">
-                <button id="reset-onboarding-btn" class="track-pill" style="font-size: 9px; padding: 4px 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.4); border-radius: 6px;">
+                <button id="reset-onboarding-btn" class="track-pill" style="font-size: 9px; padding: 4px 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-secondary); border-radius: 6px;">
                     Reset Topics
                 </button>
                 <div class="streak-badge">
@@ -231,22 +231,22 @@
         <!-- STEP 2: CONVERSATIONAL EXPERTISE ASSESSMENT -->
         <div id="onboarding-step-assessment" class="onboarding-middle hidden" style="width: 100%; max-width: 500px; margin: 0 auto;">
             <div class="flex-row-gap" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 24px;">
-                <button id="assessment-back-btn" class="track-pill" style="font-size: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 12px; color: rgba(255,255,255,0.6); cursor:pointer;">
+                <button id="assessment-back-btn" class="track-pill" style="font-size: 10px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; color: var(--text-secondary); cursor:pointer;">
                     ← Back
                 </button>
                 <div class="progress-dots" style="display: flex; gap: 6px;" id="assessment-progress-dots">
                     <!-- Dynamic dots -->
                 </div>
-                <span id="assessment-q-count" class="font-mono" style="font-size: 10px; color: rgba(255,255,255,0.4);">Q 1 OF 3</span>
+                <span id="assessment-q-count" class="font-mono" style="font-size: 10px; color: var(--text-muted);">Q 1 OF 3</span>
             </div>
 
-            <div class="assessment-card" style="width: 100%; text-align: left; background: rgba(17, 17, 25, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;">
+            <div class="assessment-card">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <span id="assessment-topic-badge" class="badge-tag" style="font-size:9px; font-weight:bold; letter-spacing:1px; border-radius:6px; padding:3px 8px; background-color: rgba(108, 99, 255, 0.12);">CODING ASSESSMENT</span>
-                    <span style="color:#555; font-family:var(--mono-font); font-size:9px;">• CHAT STREAM</span>
+                    <span id="assessment-topic-badge" class="badge-tag" style="font-size:9px; font-weight:bold; letter-spacing:1px; border-radius:6px; padding:3px 8px; background-color: var(--accent-glow); border-color: var(--accent-color);">CODING ASSESSMENT</span>
+                    <span style="color: var(--text-muted); font-family:var(--mono-font); font-size:9px;">• CHAT STREAM</span>
                 </div>
                 
-                <h2 id="assessment-question-title" style="font-size: 20px; font-weight:800; line-height: 1.4; color: white; margin: 0;">Have you ever written a production loop, script, or web app?</h2>
+                <h2 id="assessment-question-title" style="font-size: 20px; font-weight:800; line-height: 1.4; color: var(--text-primary); margin: 0;">Have you ever written a production loop, script, or web app?</h2>
 
                 <div id="assessment-options-container" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
                     <!-- Dynamic options populate here -->
@@ -262,25 +262,25 @@
 
         <!-- STEP 3: EXCITING ROADMAP SYNTHESIS -->
         <div id="onboarding-step-summary" class="onboarding-middle hidden" style="width: 100%; max-width: 500px; margin: 0 auto; text-align:center;">
-            <div class="icon-pulse-placeholder" style="width: 56px; height: 56px; border-radius: 16px; background: rgba(108, 99, 255, 0.25); border: 1px solid rgba(108, 99, 255, 0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; margin-left: auto; margin-right: auto;">
+            <div class="icon-pulse-placeholder" style="width: 56px; height: 56px; border-radius: 16px; background: var(--accent-glow); border: 1px solid var(--accent-color); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; margin-left: auto; margin-right: auto;">
                 <span class="pulse-sparkle" style="font-size:24px;">💡</span>
             </div>
 
-            <span class="font-mono text-uppercase" style="font-size: 9px; letter-spacing: 0.15em; font-weight: bold; color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 6px; justify-content: center; margin-bottom: 12px;">
+            <span class="font-mono text-uppercase" style="font-size: 9px; letter-spacing: 0.15em; font-weight: bold; color: var(--text-muted); display: flex; align-items: center; gap: 6px; justify-content: center; margin-bottom: 12px;">
                 ⚙️ GROWTH PROFILE SYNTHESIZED
             </span>
 
-            <h1 class="onboarding-main-title" style="font-size: 28px; font-weight: 800; letter-spacing:-0.5px; line-height: 1.2; margin-bottom: 12px;">Curating your DayOne growth path...</h1>
+            <h1 class="onboarding-main-title" style="font-size: 28px; font-weight: 800; letter-spacing:-0.5px; line-height: 1.2; margin-bottom: 12px; color: var(--text-primary);">Curating your DayOne growth path...</h1>
             
-            <div class="assessment-card text-left" style="width: 100%; text-align: left; background: rgba(17, 17, 25, 0.55); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; box-sizing: border-box; margin-bottom: 24px; position:relative; overflow:hidden;">
-                <p id="summary-roadmap-text" style="font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.6); margin: 0 0 16px 0;">
-                    Got it. We'll start from <strong id="summary-level-badge" style="color: white; background: rgba(108, 99, 255, 0.2); outline: 1px solid rgba(108, 99, 255, 0.2); padding: 3px 8px; border-radius: 6px; font-weight: bold; font-size: 11px;">Beginner</strong> and focus on <span id="summary-goal-italic" style="color: #a29bfe; font-style: italic;">"mastering core skills"</span>.
+            <div class="assessment-card text-left" style="margin-bottom: 24px; position:relative; overflow:hidden;">
+                <p id="summary-roadmap-text" style="font-size: 14px; line-height: 1.5; color: var(--text-secondary); margin: 0 0 16px 0;">
+                    Got it. We'll start from <strong id="summary-level-badge" style="color: var(--accent-color); background: var(--accent-glow); outline: 1px solid var(--border-color); padding: 3px 8px; border-radius: 6px; font-weight: bold; font-size: 11px;">Beginner</strong> and focus on <span id="summary-goal-italic" style="color: var(--accent-color); font-style: italic; font-weight: 500;">"mastering core skills"</span>.
                 </p>
 
-                <div style="border-top: 1px solid rgba(255,255,255,0.04); padding-top: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 11px; color: rgba(255,255,255,0.4);">
-                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #6c63ff;">✓</span> Generating custom learning cards</div>
-                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #6c63ff;">✓</span> Adjusting focus checklist complexity</div>
-                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #6c63ff;">✓</span> Calibrating micro-learning metrics</div>
+                <div style="border-top: 1px solid var(--border-color); padding-top: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 11px; color: var(--text-secondary);">
+                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent-color);">✓</span> Generating custom learning cards</div>
+                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent-color);">✓</span> Adjusting focus checklist complexity</div>
+                    <div style="display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent-color);">✓</span> Calibrating micro-learning metrics</div>
                 </div>
             </div>
 
